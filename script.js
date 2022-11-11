@@ -1,6 +1,6 @@
 // Arrays of special characters, numerical numbers, lowercase and uppercase characters 
-const specialCharaters = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split('');
-const numbers = "0123456789".split('');
+const specialChar = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split('');
+const numericalChar = "0123456789".split('');
 const lowercaseChar = "abcdefghijklmnopqrstuvwxyz".split('');
 const uppercaseChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 
@@ -13,7 +13,7 @@ function randomChar(arr) {
 function generatePassword() {
 
   // Prompt user for password length
-  var pwdLength = parseInt(window.prompt("How many characters would you like your pass"));
+  var pwdLength = parseInt(window.prompt("How many characters would you like your password to contain?"));
 
   // Gives warning and exists if input value is not a number, more than 128, or less than 8
   if (isNaN(pwdLength)) {
@@ -26,36 +26,49 @@ function generatePassword() {
     window.alert("Password length must be at least 8 characters.");
     return null;
   } else { 
+    // Initiate empty string for the generated password
+    var password = "";
+
     // Initiate empty array to store all possible character types.
     var possibleChar = [];
-    // Check if special characters should be included, append to array if true
+
+    // Initiate an empty array for gauranteed characters, ensuring at least one of each character type is in the password.
+    var gauranteedChar = [];
+
+    // Check if special characters should be included, append to both arrays if true
     if (window.confirm("Click OK to confirm including speical characters.")) {
-      possibleChar =possibleChar.concat(specialCharaters);
+      possibleChar =possibleChar.concat(specialChar);
+      gauranteedChar.push(randomChar(specialChar));
     }
-    // Check if numeric characters should be included, append to array if true
+    // Check if numeric characters should be included, append to both arrays if true
     if (window.confirm("Click OK to confirm including numeric characters.")) {
-      possibleChar = possibleChar.concat(numbers);
+      possibleChar = possibleChar.concat(numericalChar);
+      gauranteedChar.push(randomChar(numericalChar));
     }
-    // Check if lowercase characters should be included, append to array if true
+    // Check if lowercase characters should be included, append to both arrays if true
     if (window.confirm("Click OK to confirm including lowercase characters.")) {
       possibleChar = possibleChar.concat(lowercaseChar);
+      gauranteedChar.push(randomChar(lowercaseChar));
     }
-    // Check if uppercase characters should be included, append to array if true
+    // Check if uppercase characters should be included, append to both arrays if true
     if (window.confirm("Click OK to confirm including uppercase characters.")) {
       possibleChar = possibleChar.concat(uppercaseChar);
+      gauranteedChar.push(randomChar(uppercaseChar));
     }
-
-    console.log(possibleChar);
-    if (possibleChar.length === 0) {
+    // Check if any character type is selected, exit if none is selected
+    if (gauranteedChar.length === 0) {
       window.alert("Must select at least one character type.");
       return null;
     }
-    // let password = generatePassword();
-    // return password;
-    var password = "";
-    for (let i = 0; i < pwdLength; i++) {
+
+    // Add the gauranteed characters to the beginning of the password
+    password += gauranteedChar.join("");
+
+    // Ramdomize the rest of the password
+    for (let i = 0; i < (pwdLength - gauranteedChar.length); i++) {
       password += randomChar(possibleChar);
     }
+    
     return password;
   }
 }
